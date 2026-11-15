@@ -1,0 +1,46 @@
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const api=async(url)=>{const r=await fetch(url);const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");return d;};
+const navToggle=$(".menu-toggle");if(navToggle)navToggle.addEventListener("click",()=>$(".nav")?.classList.toggle("open"));
+async function nasaSearch(q,page=1,media="image"){return api(`/api/nasa/search?q=${encodeURIComponent(q)}&page=${page}&media_type=${media}`);}
+function analogCard(a,withImage=true){return `<article class="analog-card"><div class="analog-image">${withImage?`<img loading="lazy" alt="" data-nasa-query="${escapeHTML(a.query)}">`:""}<span class="image-label">EARTH → ${escapeHTML(a.target.toUpperCase())}</span></div><div class="analog-body"><div class="pills"><span class="pill">${escapeHTML(a.target)}</span><span class="pill">${escapeHTML(a.theme)}</span></div><h3>${escapeHTML(a.name)}</h3><div class="location">${escapeHTML(a.earth)}</div><p>${escapeHTML(a.summary)}</p><div class="card-bottom"><span>NASA source-linked profile</span><button class="detail-button" data-analog-id="${escapeHTML(a.id)}">Scientific details ↗</button></div></div></article>`;}
+async function loadAnalogs(){let records=[];try{records=await (await fetch("/analogs.json")).json();}catch{return;}
+ const grid=$("#analogGrid");if(grid){const search=$("#analogSearch"),filter=$("#targetFilter"),params=new URLSearchParams(location.search);if(params.has("target")&&filter)filter.value=params.get("target");const render=()=>{const q=(search?.value||"").toLowerCase();const t=filter?.value||"all";const found=records.filter(a=>(t==="all"||a.target.includes(t))&&[a.name,a.earth,a.theme,a.process,a.summary,a.target].join(" ").toLowerCase().includes(q));grid.innerHTML=found.length?found.map(a=>analogCard(a)).join(""):`<div class="loading-card">No records match. Try another search.</div>`;if($("#analogCount"))$("#analogCount").textContent=`${found.length} of ${records.length} NASA-documented profiles`;grid.querySelectorAll("[data-nasa-query]").forEach(img=>loadCardImage(img));};search?.addEventListener("input",render);filter?.addEventListener("change",render);render();}
+ const featured=$("#featuredGrid");if(featured){featured.innerHTML=records.slice(0,3).map(a=>analogCard(a)).join("");featured.querySelectorAll("[data-nasa-query]").forEach(loadCardImage);}
+ const detailHost=$("#detailDialog");const eventHost=grid||featured;if(eventHost)eventHost.addEventListener("click",e=>{const btn=e.target.closest("[data-analog-id]");if(!btn)return;const a=records.find(x=>x.id===btn.dataset.analogId);if(!a||!detailHost)return;$("#detailContent").innerHTML=`<div class="eyebrow">${escapeHTML(a.theme)} / ${escapeHTML(a.target)}</div><h2>${escapeHTML(a.name)}</h2><p><b>Earth field site:</b> ${escapeHTML(a.earth)}</p><h3>Shared process</h3><p>${escapeHTML(a.process)}</p><h3>Scientific relevance</h3><p>${escapeHTML(a.summary)}</p><h3>Documented evidence</h3><p>${escapeHTML(a.evidence)}</p><h3>Limitations</h3><p>${escapeHTML(a.limits)}</p><p><a href="${escapeHTML(a.source)}" target="_blank" rel="noopener">Open NASA source ↗</a></p>`;detailHost.showModal();});
+ $("#closeDialog")?.addEventListener("click",()=>detailHost?.close());
+}
+async function loadCardImage(img){try{const d=await nasaSearch(img.dataset.nasaQuery);if(d.items?.[0]?.image){img.src=d.items[0].image;img.alt=d.items[0].title;}else img.remove();}catch{img.remove();}}
+async function loadHome(){const hero=$("#heroBg");if(hero){try{const d=await nasaSearch("Earth from space NASA blue marble");if(d.items?.[0]?.image)hero.style.backgroundImage=`url("${d.items[0].image}")`;}catch{}}
+const feature=$("#liveFeature");if(feature){try{const d=await nasaSearch("Earth from space");const item=d.items?.[0];if(item)feature.innerHTML=`<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title)}"><div class="live-feature-label">NASA IMAGE ARCHIVE <b>${escapeHTML(item.title)}</b><span>${escapeHTML(item.center)} · ${escapeHTML(item.dateCreated?.slice(0,10)||"Date not supplied")}</span></div>`;}catch{feature.innerHTML='<div class="live-placeholder"><span>ARCHIVE TEMPORARILY UNAVAILABLE</span><b>Try the NASA imagery page later.</b></div>';}}}
+async function loadWorldImages(){
+ const targets=[
+  {selector:"#earth .world-detail-image",query:"NASA Blue Marble Earth full disk global image"},
+  {selector:"#moon .world-detail-image",query:"NASA Lunar Reconnaissance Orbiter Moon global mosaic"},
+  {selector:"#mars .world-detail-image",query:"NASA Mars Viking global color mosaic surface rover panorama"},
+  {selector:".world-art.earth-art",query:"NASA Blue Marble Earth full disk global image"},
+  {selector:".world-art.moon-art",query:"NASA Lunar Reconnaissance Orbiter Moon global mosaic"},
+  {selector:".world-art.mars-art",query:"NASA Mars Viking global color mosaic surface rover panorama"}
+ ];
+ for(const target of targets){const host=$(target.selector);if(!host)continue;try{const d=await nasaSearch(target.query);const item=d.items?.[0];if(item?.image){const img=document.createElement("img");img.src=item.image;img.alt=item.title;img.loading="lazy";img.style.cssText="width:100%;height:100%;min-height:inherit;object-fit:cover;opacity:.9;display:block";host.append(img);const credit=document.createElement("span");credit.textContent=`NASA ARCHIVE · ${item.center}`;credit.style.cssText="position:absolute;bottom:14px;left:16px;padding:5px 8px;background:#07101cbb;color:#e8f1f5;font:9px var(--mono);letter-spacing:.08em";host.style.position="relative";host.append(credit);}}catch{}}
+}
+function loadArchive(){const form=$("#nasaForm");if(!form)return;let page=1,lastQuery=$("#nasaQuery").value,media=$("#mediaType").value;const status=$("#nasaStatus"),results=$("#nasaResults"),prev=$("#prevPage"),next=$("#nextPage"),label=$("#pageLabel");
+async function run(){lastQuery=$("#nasaQuery").value.trim();media=$("#mediaType").value;if(lastQuery.length<2)return;status.textContent="Contacting NASA Image and Video Library…";results.innerHTML="";try{const d=await nasaSearch(lastQuery,page,media);status.textContent=`${d.totalHits??"Unknown"} archive matches · ${d.items.length} shown · ${d.cached?"cached response":"fetched "+new Date(d.fetchedAt).toLocaleString()} · Source: ${d.source}`;results.innerHTML=d.items.length?d.items.map(x=>`<article class="nasa-item"><img loading="lazy" src="${escapeHTML(x.image)}" alt="${escapeHTML(x.title)}"><div class="nasa-item-content"><h3>${escapeHTML(x.title)}</h3><p>${escapeHTML(x.dateCreated?.slice(0,10)||"Date not supplied")} · ${escapeHTML(x.center)}</p><a href="${escapeHTML(x.nasaUrl)}" target="_blank" rel="noopener">Open NASA record ↗</a></div></article>`).join(""):`<div class="loading-card">No results returned. Try a broader search.</div>`;label.textContent=`Page ${page}`;prev.disabled=page<=1;next.disabled=d.items.length===0;}catch(e){status.textContent=e.message;results.innerHTML='<div class="loading-card">NASA archive request failed. Check your internet connection and retry.</div>';next.disabled=true;}}
+form.addEventListener("submit",e=>{e.preventDefault();page=1;run();});prev?.addEventListener("click",()=>{if(page>1){page--;run();}});next?.addEventListener("click",()=>{page++;run();});run();}
+loadAnalogs();loadHome();loadWorldImages();loadArchive();
+
+async function loadAnalogMap(){
+ const host=$("#analogMap");if(!host||!window.L)return;
+ const records=await fetch("/analogs.json").then(r=>r.json()).catch(()=>[]);
+ let map=L.map(host).setView([-10,15],2),earthLayer=null,markers=[],mode="earth";
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+ const earthPins=records.filter(a=>a.earthCoordinates).map(a=>({name:a.name,site:a.earth,lat:a.earthCoordinates.lat,lon:a.earthCoordinates.lon,target:a.target,theme:a.theme,summary:a.summary,source:a.source,id:a.id}));
+ const marsPins=[
+  {name:"Jezero Crater",site:"Perseverance landing region",lat:18.4,lon:77.7,why:"Ancient lake and delta deposits; used in NASA comparisons with carbonate-rich shoreline environments such as Lake Salda."},
+  {name:"Utopia Planitia",site:"Viking 2 landing region",lat:47.6,lon:225.9,why:"A northern plains region used in NASA's visual comparison with rugged terrain in Death Valley."},
+  {name:"Gale Crater",site:"Curiosity rover exploration region",lat:-5.4,lon:137.8,why:"A former lake environment investigated by Curiosity; relevant to sedimentary geology and habitability."},
+  {name:"Phoenix landing region",site:"Northern plains of Mars",lat:68.2,lon:234.3,why:"NASA's Phoenix lander detected water-ice and studied soil chemistry; NASA compares this region with salt research in Utah's Pilot Valley."},
+  {name:"Meridiani Planum",site:"Opportunity rover exploration region",lat:-1.9,lon:354.5,why:"A region with sedimentary and mineral evidence studied by the Opportunity rover."}
+ ];
+ function clearMarkers(){markers.forEach(m=>m.remove());markers=[];}
+ function s
