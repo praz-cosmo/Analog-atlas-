@@ -43,4 +43,209 @@ async function loadAnalogMap(){
   {name:"Meridiani Planum",site:"Opportunity rover exploration region",lat:-1.9,lon:354.5,why:"A region with sedimentary and mineral evidence studied by the Opportunity rover."}
  ];
  function clearMarkers(){markers.forEach(m=>m.remove());markers=[];}
- function s
+ function showDetails(item,isMars){
+  const box=$("#mapDetails");if(!box)return;
+  box.innerHTML=`<b>${escapeHTML(item.name)}</b><p>${escapeHTML(item.site||"")}</p><p>${escapeHTML(isMars?item.why:item.summary||item.theme||"")}</p>${!isMars&&item.source?`<a href="${escapeHTML(item.source)}" target="_blank" rel="noopener">NASA source ↗</a>`:""}`;
+ }
+ function earthView(){
+  mode="earth";clearMarkers();
+  if(map.options.crs!==L.CRS.EPSG3857){map.remove();map=L.map(host).setView([-10,15],2);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(map);}
+  earthPins.forEach(item=>{const m=L.circleMarker([item.lat,item.lon],{radius:8,color:"#07131a",weight:2,fillColor:"#84e2df",fillOpacity:.95}).addTo(map);m.bindPopup(`<b>${escapeHTML(item.name)}</b><br>${escapeHTML(item.site)}<br><small>Target: ${escapeHTML(item.target)}</small>`);m.on("click",()=>showDetails(item,false));markers.push(m);});
+  $("#earthMapBtn")?.classList.add("selected");$("#marsMapBtn")?.classList.remove("selected");
+  $("#mapDetails").innerHTML="<b>Earth analog field sites</b><p>Markers show approximate locations of the named field regions. Select a marker for the research context.</p>";
+  setTimeout(()=>map.invalidateSize(),100);
+ }
+ function marsView(){
+  mode="mars";clearMarkers();map.remove();
+  map=L.map(host,{crs:L.CRS.Simple,minZoom:-1,maxZoom:3}).setView([0,180],0);
+  // Schematic equirectangular Mars coordinate plane, not a photographic basemap.
+  const bounds=[[-90,0],[90,360]];
+  L.rectangle(bounds,{color:"#b8754d",weight:1,fillColor:"#7c3c2b",fillOpacity:.78}).addTo(map);
+  for(let lat=-60;lat<=60;lat+=30)L.polyline([[lat,0],[lat,360]],{color:"#e4b28b",weight:1,opacity:.35,dashArray:"4 7"}).addTo(map);
+  for(let lon=0;lon<=360;lon+=60)L.polyline([[-90,lon],[90,lon]],{color:"#e4b28b",weight:1,opacity:.35,dashArray:"4 7"}).addTo(map);
+  marsPins.forEach(item=>{const m=L.circleMarker([item.lat,item.lon],{radius:8,color:"#24120e",weight:2,fillColor:"#f0b07f",fillOpacity:1}).addTo(map);m.bindPopup(`<b>${escapeHTML(item.name)}</b><br>${escapeHTML(item.site)}`);m.on("click",()=>showDetails(item,true));markers.push(m);});
+  $("#marsMapBtn")?.classList.add("selected");$("#earthMapBtn")?.classList.remove("selected");
+  $("#mapDetails").innerHTML="<b>Mars comparison regions</b><p>Schematic latitude–longitude view with approximate locations. It is not a georeferenced basemap or a landing-site navigation tool.</p>";
+  setTimeout(()=>map.invalidateSize(),100);
+ }
+ $("#earthMapBtn")?.addEventListener("click",earthView);$("#marsMapBtn")?.addEventListener("click",marsView);earthView();
+}
+
+async function loadComparisonGallery() {
+  const host = $("#comparisonGallery");
+  if (!host) return;
+
+  const pairs = [
+    {
+      title: "McMurdo Dry Valleys ↔ ancient Martian valleys",
+      earth: "McMurdo Dry Valleys, Antarctica",
+      mars: "Mars: water-carved channels and valley networks",
+      eq: "McMurdo Dry Valleys Antarctica NASA satellite image",
+      mq: "Mars ancient valley networks water carved channels NASA orbiter",
+      similar: "Extreme cold, aridity, exposed rock and landforms shaped by water in the past make the Dry Valleys valuable for studying how environments preserve clues about ancient water.",
+      limit: "Antarctica has liquid water, an atmosphere and Earth biology. Similar-looking channels do not prove the same formation history. NASA's Earth Observatory specifically compares Dry Valleys imagery with Martian orbital images.",
+      source: "https://science.nasa.gov/earth/earth-observatory/martian-landscape-antarctica-4420/"
+    },
+    {
+      title: "Atacama Desert ↔ Mars soil science",
+      earth: "Atacama Desert, Chile",
+      mars: "Mars: rover exploration terrain",
+      eq: "Atacama Desert Chile NASA field research soil",
+      mq: "NASA Perseverance rover Mars surface landscape",
+      similar: "The Atacama's hyperarid soils are useful for testing sensitive instruments and studying how traces of biology may persist in extremely dry environments.",
+      limit: "The Atacama is not Mars: atmospheric pressure, radiation, temperature, gravity and water history differ. It is an analog for selected research questions, not a full environmental duplicate.",
+      source: "https://science.nasa.gov/solar-system/analog-explorer/"
+    },
+    {
+      title: "Death Valley ↔ Utopia Planitia",
+      earth: "Death Valley, California, USA",
+      mars: "Utopia Planitia, Mars",
+      eq: "Death Valley California NASA rocky terrain",
+      mq: "Viking 2 Utopia Planitia Mars surface NASA",
+      similar: "NASA describes Death Valley as a place where the Mars 2020 team practiced hazard avoidance. NASA's Analog Explorer also notes visual similarities between Death Valley and the Viking 2 view of Utopia Planitia.",
+      limit: "The value is rover operations and terrain interpretation. The two locations differ in gravity, atmosphere, weathering and surface conditions.",
+      source: "https://science.nasa.gov/solar-system/analog-explorer/"
+    },
+    {
+      title: "Icelandic gravel ripples ↔ Martian ripples",
+      earth: "Vikursundar region near Askja, Iceland",
+      mars: "Mars: large wind-shaped ripple fields",
+      eq: "Iceland Askja Vikursundar gravel ripples NASA",
+      mq: "Mars wind ripples dunes orbital image NASA MRO",
+      similar: "Researchers monitor slow-moving gravel ripples in Iceland with drone-derived terrain models and compare surface-pattern change with Martian ripples.",
+      limit: "NASA notes the Martian ridges in its comparison are about ten times larger. Similar patterns can form under different conditions and scales.",
+      source: "https://science.nasa.gov/solar-system/analog-explorer/"
+    },
+    {
+      title: "Lake Salda ↔ Jezero Crater",
+      earth: "Lake Salda, Türkiye",
+      mars: "Jezero Crater, Mars",
+      eq: "Lake Salda Turkey carbonate shoreline NASA",
+      mq: "NASA Perseverance Jezero crater delta aerial orbital",
+      similar: "Carbonate-rich shoreline sediments at Lake Salda provide a terrestrial setting for studying mineral and sediment processes relevant to Jezero's ancient lake and delta deposits.",
+      limit: "Mineral similarities are not evidence of past life on Mars. The comparison is about geology and preservation potential, not a claim that the sites are identical.",
+      source: "https://science.nasa.gov/solar-system/analog-explorer/"
+    }
+  ];
+
+  // Search several phrases and test whether each image actually loads.
+  async function loadPreview(img, queries) {
+    for (const query of queries) {
+      try {
+        const data = await nasaSearch(query);
+
+        for (const item of data.items || []) {
+          if (!item.image) continue;
+
+          img.loading = "eager";
+
+          const loaded = await new Promise(resolve => {
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = item.image;
+          });
+
+          if (!loaded) continue;
+
+          img.alt = item.title || "NASA archive image";
+          img.title = item.title || "";
+
+          const link = document.createElement("a");
+          link.href = item.nasaUrl || "https://images.nasa.gov/";
+          link.target = "_blank";
+          link.rel = "noopener";
+
+          img.parentNode.insertBefore(link, img);
+          link.appendChild(img);
+
+          return true;
+        }
+      } catch (error) {
+        console.warn("NASA image search failed:", query, error);
+      }
+    }
+
+    const fallback = document.createElement("div");
+    fallback.className = "side-caption";
+    fallback.textContent = "Image unavailable. Search the NASA archive for this location.";
+
+    img.replaceWith(fallback);
+    return false;
+  }
+
+  host.innerHTML = "";
+
+  for (const p of pairs) {
+    const card = document.createElement("article");
+    card.className = "comparison-card";
+
+    card.innerHTML = `
+      <div class="comparison-head">
+        <div>
+          <div class="eyebrow">EARTH ↔ MARS / ANALOG PAIR</div>
+          <h3>${escapeHTML(p.title)}</h3>
+          <p>NASA-linked comparison · Read the scientific limits below</p>
+        </div>
+      </div>
+
+      <div class="comparison-pair">
+        <div class="comparison-side">
+          <span class="side-label">EARTH ANALOG</span>
+          <img alt="${escapeHTML(p.earth)}">
+          <div class="side-caption">
+            <b>${escapeHTML(p.earth)}</b>
+            Earth field environment
+          </div>
+        </div>
+
+        <div class="comparison-side">
+          <span class="side-label">MARS</span>
+          <img alt="${escapeHTML(p.mars)}">
+          <div class="side-caption">
+            <b>${escapeHTML(p.mars)}</b>
+            Planetary comparison region
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison-science">
+        <div>
+          <h4>WHY COMPARE?</h4>
+          <p>${escapeHTML(p.similar)}</p>
+        </div>
+        <div>
+          <h4>IMPORTANT LIMITATION</h4>
+          <p>${escapeHTML(p.limit)}</p>
+        </div>
+      </div>
+
+      <div class="image-source">
+        Images: NASA Image and Video Library previews ·
+        <a href="${escapeHTML(p.source)}" target="_blank" rel="noopener">
+          Read NASA's analog context ↗
+        </a>
+      </div>
+    `;
+
+    host.append(card);
+
+    const imgs = card.querySelectorAll("img");
+
+    await Promise.all([
+      loadPreview(imgs[0], [
+        p.eq,
+        `${p.earth} NASA image`,
+        `${p.earth} landscape`
+      ]),
+
+      loadPreview(imgs[1], [
+        p.mq,
+        `${p.mars} NASA image`,
+        "Mars surface NASA image"
+      ])
+    ]);
+  }
+}
+
+
+loadAnalogMap();loadComparisonGallery();

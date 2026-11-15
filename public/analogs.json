@@ -11,7 +11,12 @@
     "limits": "Terrestrial caves do not reproduce lunar or Martian gravity, radiation, temperature cycles or geological history. A surface opening does not prove the size or continuity of an underground tube.",
     "source": "https://science.nasa.gov/solar-system/planetary-analogs/",
     "query": "NASA Lava Beds National Monument lava tube cave",
-    "earthCoordinates": { "lat": 41.5, "lon": -121.52, "label": "Lava Beds National Monument area", "precision": "Approximate regional marker" }
+    "earthCoordinates": {
+      "lat": 41.5,
+      "lon": -121.52,
+      "label": "Lava Beds National Monument area",
+      "precision": "Approximate regional marker"
+    }
   },
   {
     "id": "kilauea",
@@ -25,7 +30,12 @@
     "limits": "Earth's atmosphere, active weather, gravity and volcanic environment differ from the Moon. Similar basaltic materials do not mean identical eruption histories.",
     "source": "https://science.nasa.gov/solar-system/analog-explorer/",
     "query": "NASA Kilauea basalt landscape volcano",
-    "earthCoordinates": { "lat": 19.42, "lon": -155.29, "label": "Kīlauea area", "precision": "Approximate regional marker" }
+    "earthCoordinates": {
+      "lat": 19.42,
+      "lon": -155.29,
+      "label": "Kīlauea area",
+      "precision": "Approximate regional marker"
+    }
   },
   {
     "id": "salda",
@@ -39,7 +49,12 @@
     "limits": "Mineral or sediment similarity is not evidence that life existed on Mars. Biological claims require multiple independent lines of evidence.",
     "source": "https://science.nasa.gov/solar-system/analog-explorer/",
     "query": "NASA Lake Salda Turkey Jezero Crater",
-    "earthCoordinates": { "lat": 37.5, "lon": 29.67, "label": "Lake Salda", "precision": "Approximate regional marker" }
+    "earthCoordinates": {
+      "lat": 37.5,
+      "lon": 29.67,
+      "label": "Lake Salda",
+      "precision": "Approximate regional marker"
+    }
   },
   {
     "id": "atacama",
@@ -53,7 +68,12 @@
     "limits": "The Atacama remains an Earth environment with a different atmosphere, gravity, radiation environment and water cycle. It is not a replica of Mars.",
     "source": "https://science.nasa.gov/solar-system/analog-explorer/",
     "query": "NASA Atacama Desert soil research",
-    "earthCoordinates": { "lat": -23.5, "lon": -69.25, "label": "Atacama Desert region", "precision": "Approximate regional marker" }
+    "earthCoordinates": {
+      "lat": -23.5,
+      "lon": -69.25,
+      "label": "Atacama Desert region",
+      "precision": "Approximate regional marker"
+    }
   },
   {
     "id": "iceland-ice",
@@ -67,4 +87,125 @@
     "limits": "Ice depth, temperature, purity and surrounding geology differ. Instruments need calibration for the target environment.",
     "source": "https://science.nasa.gov/solar-system/analog-explorer/",
     "query": "NASA Iceland Askja buried ice radar",
-    "earthCoordinates": { "lat":
+    "earthCoordinates": {
+      "lat": 65.03,
+      "lon": -16.75,
+      "label": "Askja region",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "iceland-ripples",
+    "name": "Gravel land ripples",
+    "earth": "Vikursundar region, Iceland",
+    "target": "Mars",
+    "theme": "Aeolian processes · Remote sensing",
+    "process": "Monitoring slow-moving surface patterns",
+    "summary": "NASA describes teams using drone-mounted instruments and digital terrain models to monitor large gravelly ripples near Askja volcano and compare their movement with Martian landforms.",
+    "evidence": "Featured in NASA's Analog Explorer as 'Land Ripples: Iceland and Mars'.",
+    "limits": "The Martian ridges shown in NASA's comparison are about ten times larger. Similar shapes can form under different environmental conditions.",
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "query": "NASA Iceland Vikursundar land ripples Askja",
+    "earthCoordinates": {
+      "lat": 65.03,
+      "lon": -16.75,
+      "label": "Vikursundar / Askja region",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "death-valley",
+    "name": "Rugged rocky terrain",
+    "earth": "Death Valley, California, USA",
+    "target": "Mars",
+    "theme": "Mission operations · Geomorphology",
+    "process": "Rover navigation and hazard avoidance",
+    "summary": "NASA says the Mars 2020 team practiced hazard avoidance in Death Valley before the Perseverance and Ingenuity mission, using difficult terrestrial terrain to rehearse exploration decisions.",
+    "evidence": "NASA's Planetary Analog Explorer pairs Death Valley terrain with the Viking 2 view of Utopia Planitia on Mars.",
+    "limits": "The comparison supports terrain interpretation and operational practice, not equivalence in gravity, atmosphere, dust behavior or communication conditions.",
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "query": "NASA Death Valley Mars rover hazard avoidance",
+    "earthCoordinates": {
+      "lat": 36.24,
+      "lon": -116.85,
+      "label": "Death Valley region",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "pilot-valley",
+    "name": "Salt flats and brines",
+    "earth": "Pilot Valley, Utah, USA",
+    "target": "Mars",
+    "theme": "Geochemistry · Astrobiology",
+    "process": "Studying salts and possible energy sources for microbes",
+    "summary": "NASA's Analog Explorer describes research on salts in Utah's Pilot Valley, including perchlorates, in the context of salts detected on Mars and habitability questions.",
+    "evidence": "NASA's gallery explicitly pairs Utah's Pilot Valley research with the Phoenix lander region on Mars.",
+    "limits": "Finding similar salts does not establish that organisms live or lived in either environment. Chemical context and independent evidence matter.",
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "query": "NASA Pilot Valley Utah perchlorate salts",
+    "earthCoordinates": {
+      "lat": 41.9,
+      "lon": -113.5,
+      "label": "Pilot Valley",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "gulkana",
+    "name": "Glacier icequakes",
+    "earth": "Gulkana Glacier, Alaska, USA",
+    "target": "Enceladus",
+    "theme": "Seismology · Ocean worlds",
+    "process": "Using seismic measurements to investigate ice dynamics",
+    "summary": "NASA describes icequake-detection experiments at Gulkana Glacier as groundwork for future measurements on icy ocean worlds such as Enceladus.",
+    "evidence": "Featured in NASA's Planetary Analog Explorer as 'Icequakes: Alaska and Enceladus'.",
+    "limits": "No lander has yet touched Enceladus. A terrestrial glacier is not a direct model of the moon's ice shell or subsurface ocean.",
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "query": "NASA Gulkana Glacier icequake research",
+    "earthCoordinates": {
+      "lat": 62.2,
+      "lon": -145.42,
+      "label": "Gulkana Glacier region",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "verde-valley",
+    "name": "Biosignature preservation",
+    "earth": "Verde Valley, Arizona, USA",
+    "target": "Mars",
+    "theme": "Astrobiology · Sedimentology",
+    "process": "Understanding how signs of life may be preserved in rocks",
+    "summary": "NASA describes field and laboratory research in Arizona's Verde Valley to investigate how biosignatures are preserved, helping scientists interpret what robotic explorers should look for on Mars.",
+    "evidence": "Featured in NASA's Planetary Analog Explorer as 'Looking for Life: Arizona and Mars'.",
+    "limits": "Earth-based preservation studies inform search strategies; they cannot establish that Martian samples contain life.",
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "query": "NASA Verde Valley Arizona biosignature research",
+    "earthCoordinates": {
+      "lat": 34.65,
+      "lon": -111.85,
+      "label": "Verde Valley region",
+      "precision": "Approximate regional marker"
+    }
+  },
+  {
+    "id": "mcmurdo-dry-valleys",
+    "name": "McMurdo Dry Valleys",
+    "earth": "McMurdo Dry Valleys, Victoria Land, Antarctica",
+    "target": "Mars",
+    "theme": "Extreme environments · Geomorphology · Astrobiology",
+    "process": "Cold-desert processes, ancient water-shaped landforms and survival in extreme dry environments",
+    "summary": "NASA describes the McMurdo Dry Valleys as one of Earth's environments most like Mars: extremely cold and dry, with exposed terrain and water-carved channels that can be compared with Martian orbital observations. The region is also used to investigate how microorganisms persist in extreme conditions.",
+    "evidence": "NASA Earth Observatory's 'Martian Landscape, Antarctica' describes comparing Dry Valleys satellite imagery with Mars orbital imagery. NASA Astrobiology identifies the McMurdo Dry Valleys as a long-standing Mars analog site.",
+    "limits": "The Dry Valleys remain part of Earth, with a different atmosphere, gravity, radiation environment and water cycle. The visual comparison is not proof that the same processes formed every landform.",
+    "source": "https://science.nasa.gov/earth/earth-observatory/martian-landscape-antarctica-4420/",
+    "query": "McMurdo Dry Valleys Antarctica NASA satellite",
+    "earthCoordinates": {
+      "lat": -77.5,
+      "lon": 161.0,
+      "label": "McMurdo Dry Valleys region",
+      "precision": "Approximate regional marker"
+    }
+  }
+]
