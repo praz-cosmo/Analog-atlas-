@@ -1,1 +1,143 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Analog Site Maps — ANALOG ATLAS</title><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""></head><body><header class="topbar"><a class="brand" href="/"><span class="brand-symbol">A</span><span>ANALOG <i>ATLAS</i></span></a><button class="menu-toggle" aria-label="Open navigation">☰</button><nav class="nav"><a href="/">Home</a><a href="/explorer">Analog explorer</a><a href="/worlds">Worlds</a><a href="/map" class="active">Site map</a><a href="/gallery">Comparison gallery</a><a href="/imagery">NASA imagery</a><a href="/research">Research desk</a></nav><span class="live-pill"><b></b> FIELD SITE MAPS</span></header><main class="subpage"><section class="page-hero"><div class="eyebrow">04 / GEOGRAPHIC EXPLORER</div><h1>Field sites, <em>mapped.</em></h1><p>Explore the Earth locations used in planetary-analog research, then switch to Mars to see selected comparison regions. Pins show approximate regional locations, not exact sampling coordinates.</p></section><section class="wrap map-section"><div class="map-toolbar"><div><span class="eyebrow">SELECT A WORLD</span><h2>Where are the analogs?</h2></div><div class="map-switch"><button class="button primary" id="earthMapBtn">Earth field sites</button><button class="button ghost" id="marsMapBtn">Mars comparison sites</button></div></div><div id="analogMap" role="application" aria-label="Interactive map of planetary analog locations"></div><div class="map-legend"><span><i class="legend-dot earth-dot"></i> Earth analog field site</span><span><i class="legend-dot mars-dot"></i> Mars comparison region</span><span class="micro">Approximate regional markers · OpenStreetMap base map on Earth · Mars view uses a schematic coordinate plane</span></div><div class="map-details" id="mapDetails"><b>Choose a marker</b><p>Tap a pin to see the site, target world and research focus.</p></div></section><section class="wrap note-panel"><b>Map accuracy note</b><p>Earth pins represent the named site or broad field region. The Mars map uses named geographic regions from NASA mission and analog references. The paired locations are not necessarily directly opposite or geologically identical; the connection is the process or research question being studied.</p><a href="/research">Review the source and method ↗</a></section></main><footer><div class="footer-bottom">ANALOG ATLAS · Independent educational project · Not a NASA product</div></footer><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script><script src="/app.js" defer></script></body></html>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Analog Site Maps — ANALOG ATLAS</title>
+
+    <link rel="stylesheet" href="/styles.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-symbol">A</span>
+            <span>ANALOG <i>ATLAS</i></span>
+        </a>
+
+        <button class="menu-toggle" aria-label="Open navigation">
+            ☰
+        </button>
+
+        <nav class="nav">
+            <a href="/">Home</a>
+            <a href="/explorer">Analog explorer</a>
+            <a href="/worlds">Worlds</a>
+            <a href="/map" class="active">Site map</a>
+            <a href="/gallery">Comparison gallery</a>
+            <a href="/imagery">NASA imagery</a>
+            <a href="/research">Research desk</a>
+        </nav>
+
+        <span class="live-pill">
+            <b></b> FIELD SITE MAPS
+        </span>
+    </header>
+
+    <main class="subpage">
+        <section class="page-hero">
+            <div class="eyebrow">04 / GEOGRAPHIC EXPLORER</div>
+
+            <h1>
+                Field sites, <em>mapped.</em>
+            </h1>
+
+            <p>
+                Explore the Earth locations used in planetary-analog research,
+                then switch to Mars to see selected comparison regions. Pins
+                show approximate regional locations, not exact sampling
+                coordinates.
+            </p>
+        </section>
+
+        <section class="wrap map-section">
+            <div class="map-toolbar">
+                <div>
+                    <span class="eyebrow">SELECT A WORLD</span>
+                    <h2>Where are the analogs?</h2>
+                </div>
+
+                <div class="map-switch">
+                    <button class="button primary" id="earthMapBtn">
+                        Earth field sites
+                    </button>
+
+                    <button class="button ghost" id="marsMapBtn">
+                        Mars comparison sites
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="analogMap"
+                role="application"
+                aria-label="Interactive map of planetary analog locations"
+            ></div>
+
+            <div class="map-legend">
+                <span>
+                    <i class="legend-dot earth-dot"></i>
+                    Earth analog field site
+                </span>
+
+                <span>
+                    <i class="legend-dot mars-dot"></i>
+                    Mars comparison region
+                </span>
+
+                <span class="micro">
+                    Approximate regional markers · OpenStreetMap base map
+                    on Earth · Mars view uses a schematic coordinate plane
+                </span>
+            </div>
+
+            <div class="map-details" id="mapDetails">
+                <b>Choose a marker</b>
+                <p>
+                    Tap a pin to see the site, target world and research focus.
+                </p>
+            </div>
+        </section>
+
+        <section class="wrap note-panel">
+            <b>Map accuracy note</b>
+
+            <p>
+                Earth pins represent the named site or broad field region.
+                The Mars map uses named geographic regions from NASA mission
+                and analog references. The paired locations are not
+                necessarily directly opposite or geologically identical;
+                the connection is the process or research question being
+                studied.
+            </p>
+
+            <a href="/research">
+                Review the source and method ↗
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            ANALOG ATLAS · Independent educational project · Not a NASA product
+        </div>
+    </footer>
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
+
+    <script src="/app.js" defer></script>
+</body>
+</html>
